@@ -1,10 +1,13 @@
 PROJ=example
 
+# board using package vq100 
+PKG=vq100
+
 $(PROJ).blif: $(PROJ).v $(PROJ).pcf
 	yosys -p 'synth_ice40 -top top -blif example.blif' -p 'read -sv $<' $< 
 
 $(PROJ).asc: $(PROJ).blif
-	arachne-pnr -d 1k -o example.asc -p example.pcf example.blif
+	arachne-pnr -P $(PKG) -d 1k -o example.asc -p example.pcf example.blif
 	
 $(PROJ).bin: $(PROJ).asc
 	icepack example.asc example.bin
@@ -17,6 +20,9 @@ explain: $(PROJ).asc
 
 vlog: $(PROJ).asc
 	icebox_vlog -p $(PROJ).pcf $(PROJ).asc
+
+prog: $(PROJ).bin
+	iceprog $(PROJ).bin
 	
 clean:
 	rm -f *.asc

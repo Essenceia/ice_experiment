@@ -1,3 +1,6 @@
-set_io a 1
-set_io b 10
-set_io y 11
+set_io a 51
+set_io b 54
+set_io c 53
+
+set_io l 56
+set_io y 57

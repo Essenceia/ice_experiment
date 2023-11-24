@@ -8,7 +8,7 @@ module mul_X#(
 	assign d_o = d_i * X;
 endmodule
 
-module top (input a, b, output y);
+module top (input a, b,c, output y,l);
 	localparam W = 32;
   	wire [W-1:0] x;
   	wire [W-1:0] r0;
@@ -21,6 +21,8 @@ module top (input a, b, output y);
 	);	
 
 	assign y = |(r0);
+	/* led */
+	assign l = c;
 
 endmodule
 
