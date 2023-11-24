@@ -1,5 +1,24 @@
+PROJ=example
 
-example: example.v example.pcf
-	yosys -p 'synth_ice40 -top top -blif example.blif' example.v
+$(PROJ).blif: $(PROJ).v $(PROJ).pcf
+	yosys -p 'synth_ice40 -top top -blif example.blif' -p 'read -sv $<' $< 
+
+$(PROJ).asc: $(PROJ).blif
 	arachne-pnr -d 1k -o example.asc -p example.pcf example.blif
+	
+$(PROJ).bin: $(PROJ).asc
 	icepack example.asc example.bin
+
+build: $(PROJ).bin
+	echo "Build finished"
+
+explain: $(PROJ).asc 
+	icebox_explain $(PROJ).asc
+
+vlog: $(PROJ).asc
+	icebox_vlog -p $(PROJ).pcf $(PROJ).asc
+	
+clean:
+	rm -f *.asc
+	rm -f *.bin
+	rm -f *.blif
