@@ -35,13 +35,13 @@ set_io segA_o[3] 91
 set_io segA_o[4] 90
 set_io segA_o[5] 1
 set_io segA_o[6] 2
-set_io seg2A_o 100
-set_io seg2B_o 99
-set_io seg2C_o 97
-set_io seg2D_o 95
-set_io seg2E_o 94
-set_io seg2F_o 8
-set_io seg2G_o 96
+set_io segB_o[0] 100
+set_io segB_o[1] 99
+set_io segB_o[2] 97
+set_io segB_o[3] 95
+set_io segB_o[4] 94
+set_io segB_o[5] 8
+set_io segB_o[6] 96
 
 ## UART Outputs
 set_io i_UART_RX 73

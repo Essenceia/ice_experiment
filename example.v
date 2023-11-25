@@ -19,7 +19,8 @@ module top (
 	output led1_o,
 	output led2_o,
 	output led3_o,
-	output [6:0] segA_o
+	output [6:0] segA_o,
+	output [6:0] segB_o
 	);
 	wire reset; 
 	assign reset = switch0_i;
@@ -55,6 +56,25 @@ module top (
 	end	
 	assign led1_o = stable_q;
 
+	/* 2 deep fifo cdc */
+	wire [3:0] slow_cnt;
+	fifo_2_deep #(.DATA_W(4))
+	m_cdc_fifo(
+		.w_clk(clk),
+		.r_clk(slow_clk),
+		.w_nreset(~reset),	
+		.r_nreset(~reset),
+		.w_rec_i(1'b1),
+		.w_full_o(),
+		.w_data_i(cnt_q[27:24]),
+		.r_rec_i(1'b1),
+		.r_empty_o(),
+		.r_data_o(slow_cnt)
+	);
+	asc_to_7seg m_7segB(
+		.bin({4'b0, slow_cnt}),
+		.seg(segB_o)
+	);	
 	/* default led */
 	assign led2_o = 1'b0;
 	assign led3_o = 1'b0;

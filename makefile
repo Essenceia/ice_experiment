@@ -5,7 +5,7 @@ BSP=bsp.pcf
 # board using package vq100 
 PKG=vq100
 
-sv_files=example.v asc_to_7seg.v
+sv_files=example.v asc_to_7seg.v fifo_2_deep.v
 
 $(PROJ).blif: $(sv_files)
 	yosys -p 'synth_ice40 -top top -blif example.blif' -p 'read -sv $^' $^ 
