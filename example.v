@@ -38,14 +38,19 @@ module top (
 		.seg(segA_o)
 	);
 
+	/* fake slow clk */
+	wire slow_clk;
+	assign slow_clk = cnt_q[24];
+
+
 	/* no sync */
-	assign led0_o = switch0_i;
+	assign led0_o = switch1_i;
 
 	/* 2ff sync */
 	reg meta_q;
 	reg stable_q;
-	always @(posedge clk) begin
-		meta_q <= switch0_i;
+	always @(posedge slow_clk) begin
+		meta_q <= switch1_i;
 		stable_q <= meta_q;
 	end	
 	assign led1_o = stable_q;
