@@ -34,8 +34,8 @@ wire [DATA_W-1:0] ram_data_next[1:0];
 assign w_en = w_rec_i & ~w_full_o;
 assign w_full_o = w_addr_q ^ w_r_addr_q;
 
-always @(posedge w_clk) begin
-	if (w_nreset) begin
+always @(posedge w_clk or negedge w_nreset) begin
+	if (~w_nreset) begin
 		w_addr_q <= 1'b0;
 	end else if ( w_en ) begin
 		w_addr_q <= ~w_addr_q;
@@ -61,11 +61,11 @@ always @(posedge w_clk) begin
 end
 
 /* read */
-assign r_empty_o = ~(r_addr_q ^ r_w_addr_q);
+assign r_empty_o = r_addr_q == r_w_addr_q;
 assign r_en = ~r_empty_o & r_rec_i;
 
-always @(posedge clk) begin
-	if (r_nreset)begin
+always @(posedge r_clk or negedge r_nreset) begin
+	if (~r_nreset)begin
 		r_addr_q <= 1'b0;
 	end else if (r_en) begin
 		r_addr_q <= ~r_addr_q;

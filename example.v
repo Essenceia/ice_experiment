@@ -57,7 +57,10 @@ module top (
 	assign led1_o = stable_q;
 
 	/* 2 deep fifo cdc */
-	wire [3:0] slow_cnt;
+	wire       w_full;
+	wire       r_empty;
+	wire [3:0] r_cnt;
+	reg  [3:0] r_cnt_q;
 	fifo_2_deep #(.DATA_W(4))
 	m_cdc_fifo(
 		.w_clk(clk),
@@ -65,18 +68,24 @@ module top (
 		.w_nreset(~reset),	
 		.r_nreset(~reset),
 		.w_rec_i(1'b1),
-		.w_full_o(),
+		.w_full_o(w_full),
 		.w_data_i(cnt_q[27:24]),
 		.r_rec_i(1'b1),
-		.r_empty_o(),
-		.r_data_o(slow_cnt)
+		.r_empty_o(r_empty),
+		.r_data_o(r_cnt)
 	);
+	always @(posedge slow_clk) begin
+		if(~r_empty)begin
+			r_cnt_q <= r_cnt;
+		end
+	end
+	assign led2_o = r_empty;
+	assign led3_o = w_full;
+
 	asc_to_7seg m_7segB(
-		.bin({4'b0, slow_cnt}),
+		.bin({4'b0, r_cnt_q}),
 		.seg(segB_o)
 	);	
 	/* default led */
-	assign led2_o = 1'b0;
-	assign led3_o = 1'b0;
 endmodule
 
