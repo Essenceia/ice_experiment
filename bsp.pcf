@@ -61,11 +61,11 @@ set_io o_VGA_Blu_1 41
 set_io o_VGA_Blu_2 42
 
 ## PMOD Signals
-set_io io_PMOD_1 65
-set_io io_PMOD_2 64
-set_io io_PMOD_3 63
-set_io io_PMOD_4 62
-set_io io_PMOD_7 78
-set_io io_PMOD_8 79
-set_io io_PMOD_9 80
-set_io io_PMOD_10 81
+set_io pmod_i[0] 65
+set_io pmod_i[1] 64
+set_io pmod_i[2] 63
+set_io pmod_i[3] 62
+set_io pmod_i[4] 78
+set_io pmod_i[5] 79
+set_io pmod_i[6] 80
+set_io pmod_i[7] 81

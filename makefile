@@ -1,4 +1,4 @@
-PROJ=example
+PROJ=comp
 
 # board support package
 BSP=bsp.pcf
@@ -6,18 +6,21 @@ BSP=bsp.pcf
 PKG=vq100
 DEVICE=hx1k
 
-sv_files=example.v asc_to_7seg.v fifo_2_deep.v
+sv_files=$(PROJ).v asc_to_7seg.v fifo_2_deep.v
 
 $(PROJ).blif: $(sv_files)
-	yosys -p 'synth_ice40 -top top -blif example.blif' -p 'read -sv $^' $^ 
+	yosys -p 'synth_ice40 -top top -blif $(PROJ).blif' -p 'read -sv $^' $^ 
 
 $(PROJ).asc: $(PROJ).blif $(BSP)
-	arachne-pnr -P $(PKG) -d 1k -o example.asc -p $(BSP) example.blif
+	arachne-pnr -P $(PKG) -d 1k -o $(PROJ).asc -p $(BSP) $(PROJ).blif
 	
 $(PROJ).bin: $(PROJ).asc
-	icepack example.asc example.bin
+	icepack $(PROJ).asc $(PROJ).bin
 
-build: $(PROJ).bin
+syn: $(PROJ).blif
+	echo "Syn finished"
+
+place: $(PROJ).bin
 	echo "Build finished"
 
 explain: $(PROJ).asc 
@@ -34,7 +37,10 @@ time: $(PROJ).asc
 
 tb: fifo_2_deep.v tb/tb.v
 	iverilog -Wall -s fifo_2_deep -o build/fifo_2_deep $^
-  
+
+lint_top: $(PROJ).v
+	iverilog -Wall -s top -o build/top $^
+
 clean:
 	rm -f *.asc
 	rm -f *.bin
