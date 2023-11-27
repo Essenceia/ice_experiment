@@ -7,9 +7,8 @@ module top(
 );
 reg  [7:0] pmod_meta_q;
 reg  [7:0] pmod_q;
-reg  [31:0] a;
-reg  [31:0] b;
-wire [31:0] unused;
+reg  [7:0] a;
+reg  [7:0] b;
 
 
 always @(posedge clk) begin
@@ -23,11 +22,29 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	{b, a} <= {b[23:0] ,a, pmod_q};
+	{b, a} <= {a, pmod_q};
 end
 
 wire res;
-wire [31:0] unused;
-assign {res. unused} = $countones(b);
+
+
+assign res =  a[b[2:0]];
+
+/*
+always @(a or b )begin
+	case(b[7:0])//synopsys full_case parallel_case
+		8'h1: res <= a[0];
+		8'h2: res <= a[1];
+		8'h4: res <= a[2];
+		8'h8: res <= a[3];
+		8'h10: res <= a[4];
+		8'h20: res <= a[5];
+		8'h40: res <= a[6];
+		8'h80: res <= a[6];
+	endcase
+end
+*/
+
 assign led0_o =  res;
+//assign led0_o =  |a & |b[4:0];
 endmodule

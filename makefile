@@ -9,7 +9,7 @@ DEVICE=hx1k
 sv_files=$(PROJ).v asc_to_7seg.v fifo_2_deep.v
 
 $(PROJ).blif: $(sv_files)
-	yosys -p 'synth_ice40 -top top -blif $(PROJ).blif' -p 'read -sv $^' $^ 
+	yosys -p 'synth_ice40 -top top -blif $(PROJ).blif' -p 'read -sv $^' -p 'show' $^ 
 
 $(PROJ).asc: $(PROJ).blif $(BSP)
 	arachne-pnr -P $(PKG) -d 1k -o $(PROJ).asc -p $(BSP) $(PROJ).blif
@@ -40,6 +40,11 @@ tb: fifo_2_deep.v tb/tb.v
 
 lint_top: $(PROJ).v
 	iverilog -Wall -s top -o build/top $^
+
+TB_DIR=tb
+TB_FILE=$(PROJ)_tb.v
+tb_top: $(PROJ).v $(TB_DIR)/$(TB_FILE)
+	iverilog -Wall -s top_tb -o build/top_tb $^
 
 clean:
 	rm -f *.asc
