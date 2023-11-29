@@ -44,7 +44,7 @@ always @(a or b )begin
 	endcase
 end
 */
-
+// These are pretty janky logic level count 
 assign led0_o =  res;
 //assign led0_o =  |a & |b[4:0];
 endmodule
