@@ -46,6 +46,7 @@ end
 */
 // These are pretty janky logic level count
 // I am not totally brain dead 
+// yes I am
 assign led0_o =  res;
 //assign led0_o =  |a & |b[4:0];
 endmodule
