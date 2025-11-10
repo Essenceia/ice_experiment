@@ -6,7 +6,11 @@ BSP=bsp.pcf
 PKG=vq100
 DEVICE=hx1k
 
-sv_files=$(PROJ).v asc_to_7seg.v fifo_2_deep.v
+BUILD_DIR=build
+
+sv_files=$(wildcard *.v)
+
+.PHONY: syn build explain vlog prog time tb lint waves
 
 $(PROJ).blif: $(sv_files)
 	yosys -p 'synth_ice40 -top top -blif $(PROJ).blif' -p 'read -sv $^' -p 'show' $^ 
@@ -20,7 +24,7 @@ $(PROJ).bin: $(PROJ).asc
 syn: $(PROJ).blif
 	echo "Syn finished"
 
-place: $(PROJ).bin
+build: $(PROJ).bin
 	echo "Build finished"
 
 explain: $(PROJ).asc 
@@ -35,16 +39,21 @@ prog: $(PROJ).bin
 time: $(PROJ).asc	
 	icetime -p $(BSP) -d $(DEVICE) -t $(PROJ).asc -r timeing.txt
 
-tb: fifo_2_deep.v tb/tb.v
-	iverilog -Wall -s fifo_2_deep -o build/fifo_2_deep $^
-
-lint_top: $(PROJ).v
-	iverilog -Wall -s top -o build/top $^
+lint: $(sv_files)
+	iverilog -Wall -s top -o $(BUILD_DIR)/top $^
 
 TB_DIR=tb
-TB_FILE=$(PROJ)_tb.v
-tb_top: $(PROJ).v $(TB_DIR)/$(TB_FILE)
-	iverilog -Wall -s top_tb -o build/top_tb $^
+TB_NAME=top_tb
+$(BUILD_DIR)/$(TB_NAME): $(sv_files) $(TB_DIR)/$(TB_NAME).v
+	iverilog -Wall -s $(TB_NAME) -o $(BUILD_DIR)/$(TB_NAME) $^
+
+$(BUILD_DIR)/$(TB_NAME).vcd: $(BUILD_DIR)/$(TB_NAME) 
+	vpp $(BUILD_DIR)/$(TB_NAME)
+
+tb: $(BUILD_DIR)/$(TB_NAME).vcd
+
+waves: $(BUILD_DIR)/$(TB_NAME).vcd
+	gtkwave $^
 
 clean:
 	rm -f *.asc
