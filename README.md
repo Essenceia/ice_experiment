@@ -1,22 +1,23 @@
 # ICE i40 quickstart 
 
 Flow example for our lovely Sharon, this includes : 
-- running a quick lint of the project `make lint_top`
+- running a quick lint of the project `make lint`
 - running a tb `make tb`
 - building the i40 FPGA bitstream `make build` 
 - flashing the bitstream to the fpga `make prog` ( tested with the nandland board ) 
-- getting timing information `make time`
+- getting critical path timing report `make time` ( note: your critical path upper bounds your max clk frequency ) 
 
 # Adapt to your project 
 
 In the makefile : 
 1. Update the `DEVICE` and `PKG` to match your FPGA type.
 2. Update `PROJ` to match your project name.
-3. Upadate `sc_files` to list your verilog files
 
 This build flow assumes your top level module is going to be called `top` and contained in the 
 `top.v` file. This is a common practice, if this isn't the case for you, update all instanced of `top` in 
 the makefile.
+
+If you are not running a nandland go board, update the board support package file `bsp.pcf`.
 
 # Required tools
 
@@ -25,3 +26,11 @@ the makefile.
 - gtkwave, recomended wave viewer : https://gtkwave.sourceforge.net/
 - yosys, synthsiser: https://github.com/YosysHQ/yosys
 - arachne place and route: https://github.com/YosysHQ/arachne-pnr
+
+# Quickstart 
+
+Install the tools. 
+Run lint `make lint`. 
+Run the tb `make tb`
+Open the waves `make waves`
+Sythesis your design `make syn`
