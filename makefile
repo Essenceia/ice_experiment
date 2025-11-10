@@ -53,7 +53,7 @@ $(BUILD_DIR)/$(TB_NAME).vcd: $(BUILD_DIR)/$(TB_NAME)
 tb: $(BUILD_DIR)/$(TB_NAME).vcd
 
 waves: $(BUILD_DIR)/$(TB_NAME).vcd
-	gtkwave $^
+	gtkwave $^ &
 
 clean:
 	rm -f *.asc
