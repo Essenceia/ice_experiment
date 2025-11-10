@@ -34,3 +34,5 @@ Run lint `make lint`.
 Run the tb `make tb`
 Open the waves `make waves`
 Sythesis your design `make syn`
+Build your design `make build` 
+Program your board `make prog`
