@@ -12,13 +12,11 @@ Flow example for our lovely Sharon, this includes :
 
 In the makefile : 
 1. Update the `DEVICE` and `PKG` to match your FPGA type.
-2. Update pin mappings to match your board if you are not using a Go board `bpp.pcf`
+2. Update pin mappings to match your board if you are not using a Go board `bsp.pcf`
 
 This build flow assumes your top level module is going to be called `top` and contained in the 
 `top.v` file. This is a common practice, if this isn't the case for you, update all instanced of `top` in 
 the makefile.
-
-If you are not running a nandland go board, update the board support package file `bsp.pcf`.
 
 # Required tools
 
