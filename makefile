@@ -35,17 +35,19 @@ syn: $(PROJ).blif
 build: $(PROJ).bin
 	echo "Build finished"
 
+prog: $(PROJ).bin
+	iceprog $(PROJ).bin
+
+# Additional utilities 
 explain: $(PROJ).asc 
 	icebox_explain $(PROJ).asc
 
 vlog: $(PROJ).asc
 	icebox_vlog -p $(BSP) $(PROJ).asc
 
-prog: $(PROJ).bin
-	iceprog $(PROJ).bin
-
 time: $(PROJ).asc	
 	icetime -p $(BSP) -d $(DEVICE) -t $(PROJ).asc -r timeing.txt
+	cat timeing.txt
 
 # Linting
 
@@ -72,3 +74,4 @@ clean:
 	rm -f *.bin
 	rm -f *.blif
 	rm -fr build
+	rm -f timeing.txt
