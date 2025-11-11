@@ -43,7 +43,6 @@ asc_to_7seg m_7segA(
 	.seg(segA_o)
 );
 
-
 /* output */
 assign led0_o =  res;
 endmodule

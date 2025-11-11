@@ -12,8 +12,16 @@ sv_files=$(wildcard *.v)
 
 .PHONY: syn build explain vlog prog time tb lint waves
 
+ifndef show
+#show := 
+endif 
+
+SHOW_FLAG=$(if $(show), -p 'show')
+
+# FPGA binary image generation + untils  
+
 $(PROJ).blif: $(sv_files)
-	yosys -p 'synth_ice40 -top top -blif $(PROJ).blif' -p 'read -sv $^' -p 'show' $^ 
+	yosys -p 'read -sv $^' -p 'synth_ice40 -top top -blif $(PROJ).blif' $(SHOW_FLAG) 
 
 $(PROJ).asc: $(PROJ).blif $(BSP)
 	arachne-pnr -P $(PKG) -d 1k -o $(PROJ).asc -p $(BSP) $(PROJ).blif
@@ -31,7 +39,7 @@ explain: $(PROJ).asc
 	icebox_explain $(PROJ).asc
 
 vlog: $(PROJ).asc
-	icebox_vlog -p $(PROJ).pcf $(PROJ).asc
+	icebox_vlog -p $(BSP) $(PROJ).asc
 
 prog: $(PROJ).bin
 	iceprog $(PROJ).bin
@@ -39,8 +47,12 @@ prog: $(PROJ).bin
 time: $(PROJ).asc	
 	icetime -p $(BSP) -d $(DEVICE) -t $(PROJ).asc -r timeing.txt
 
+# Linting
+
 lint: $(sv_files)
 	iverilog -Wall -s top -o $(BUILD_DIR)/top $^
+
+# Simulation 
 
 TB_DIR=tb
 TB_NAME=top_tb
@@ -59,3 +71,4 @@ clean:
 	rm -f *.asc
 	rm -f *.bin
 	rm -f *.blif
+	rm -fr build
