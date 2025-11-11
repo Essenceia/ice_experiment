@@ -48,11 +48,11 @@ $(BUILD_DIR)/$(TB_NAME): $(sv_files) $(TB_DIR)/$(TB_NAME).v
 	iverilog -Wall -s $(TB_NAME) -o $(BUILD_DIR)/$(TB_NAME) $^
 
 $(BUILD_DIR)/$(TB_NAME).vcd: $(BUILD_DIR)/$(TB_NAME) 
-	vpp $(BUILD_DIR)/$(TB_NAME)
+	vvp $(BUILD_DIR)/$(TB_NAME)
 
 tb: $(BUILD_DIR)/$(TB_NAME).vcd
 
-waves: $(BUILD_DIR)/$(TB_NAME).vcd
+waves: $(BUILD_DIR)/$(TB_NAME).vcd  
 	gtkwave $^ &
 
 clean:

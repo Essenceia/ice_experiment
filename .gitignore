@@ -3,3 +3,5 @@
 *.blif
 tool/**
 tool
+*.vcd
+build

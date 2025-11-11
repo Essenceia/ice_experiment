@@ -35,12 +35,12 @@ assign res =  a[b[2:0]];
 
 asc_to_7seg m_7segB(
 	.bin({4'b0, cnt_q[24:21]}),
-	.seg(segA_o)
+	.seg(segB_o)
 );
 
 asc_to_7seg m_7segA(
 	.bin({4'b0, cnt_q[28:25]}),
-	.seg(segB_o)
+	.seg(segA_o)
 );
 
 
